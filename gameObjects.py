@@ -32,6 +32,7 @@ class Snake:
     def update(self, apple):
         if self.head[0] == apple.xPos and self.head[1] == apple.yPos:
             apple.update_position()
+            pygame.mixer.Sound("eat_apple.mp3").play()
             self.score += 1
         else:
             self.body.pop(0)

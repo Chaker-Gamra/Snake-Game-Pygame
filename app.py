@@ -7,8 +7,12 @@ bg = pygame.image.load("BackGround.png")
 clock = pygame.time.Clock()
 font = pygame.font.SysFont('tahoma', 32)
 
+game_over_sound = pygame.mixer.Sound("game_over.wav")
 apple = Apple()
 snake = Snake(250, 250)
+
+BLACK = (0, 0, 0)
+RED = (255, 0, 0)
 
 running = True
 game_over = False
@@ -32,6 +36,7 @@ while running:
     snake.update(apple)
     if snake.hit_itself():
         game_over = True
+        game_over_sound.play()
 
     # Render
     screen.blit(bg, bg.get_rect())
@@ -46,6 +51,14 @@ while running:
             if event.type == pygame.QUIT:
                 running = False
                 game_over = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_r:
+                    game_over = False
+                    apple = Apple()
+                    snake = Snake(250, 250)
+                if event.key == pygame.K_q:
+                    running = False
+                    game_over = False
 
         # Update
 
@@ -53,8 +66,9 @@ while running:
         screen.blit(bg, bg.get_rect())
         apple.render(screen)
         snake.render(screen)
-        screen.blit(font.render('Score: ' + str(snake.score), True, (0, 0, 0)), (10, 5))
-        screen.blit(font.render('Game Over', True, (255, 0, 0)), (150, 250))
+        screen.blit(font.render('Score: ' + str(snake.score), True, BLACK), (10, 5))
+        screen.blit(font.render('Game Over', True, RED), (150, 250))
+        screen.blit(font.render('Press r To Replay or q To Quit', True, BLACK), (40, 200))
         pygame.display.update()
         clock.tick(10)
 

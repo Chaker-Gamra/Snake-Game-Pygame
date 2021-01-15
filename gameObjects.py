@@ -20,14 +20,35 @@ class Snake:
         self.head = (xPos, yPos)
         self.body = [self.head]
         self.motion = [1, 0]
+        self.score = 0
+
+    def hit_itself(self):
+        for i in range(len(self.body) - 1):
+            if self.head == self.body[i]:
+                return True
+
+        return False
 
     def update(self, apple):
         if self.head[0] == apple.xPos and self.head[1] == apple.yPos:
             apple.update_position()
+            self.score += 1
         else:
             self.body.pop(0)
 
-        new_head = (self.head[0] + self.motion[0]*25, self.head[1] + self.motion[1]*25)
+        x = self.head[0] + self.motion[0]*25
+        y = self.head[1] + self.motion[1]*25
+
+        if x == 500:
+            x = 0
+        elif x < 0:
+            x = 475
+        if y == 500:
+            y = 0
+        elif y < 0:
+            y = 475
+
+        new_head = (x, y)
         self.body.append(new_head)
         self.head = new_head
 

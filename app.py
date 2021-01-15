@@ -5,9 +5,13 @@ pygame.init()
 screen = pygame.display.set_mode((500, 500))
 bg = pygame.image.load("BackGround.png")
 clock = pygame.time.Clock()
+font = pygame.font.SysFont('tahoma', 32)
+
 apple = Apple()
 snake = Snake(250, 250)
+
 running = True
+game_over = False
 
 while running:
     # Check For Inputs
@@ -26,12 +30,32 @@ while running:
 
     # Update
     snake.update(apple)
+    if snake.hit_itself():
+        game_over = True
 
     # Render
     screen.blit(bg, bg.get_rect())
     apple.render(screen)
     snake.render(screen)
+    screen.blit(font.render('Score: '+ str(snake.score), True, (0,0,0)), (10,5))
     pygame.display.update()
     clock.tick(10)
+
+    while game_over:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+                game_over = False
+
+        # Update
+
+        # Render
+        screen.blit(bg, bg.get_rect())
+        apple.render(screen)
+        snake.render(screen)
+        screen.blit(font.render('Score: ' + str(snake.score), True, (0, 0, 0)), (10, 5))
+        screen.blit(font.render('Game Over', True, (255, 0, 0)), (150, 250))
+        pygame.display.update()
+        clock.tick(10)
 
 pygame.quit()
